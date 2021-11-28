@@ -1,0 +1,53 @@
+---
+title: "DA Assignment 2"
+---
+
+
+Task 1
+
+```{r}
+library(MASS)
+data("Boston")
+Boston.Data = Boston[,c("lstat","rm","medv")]
+set.seed(2605)
+train <- sample(1:nrow(Boston.Data),nrow(Boston.Data)/2)
+Boston.train = Boston.Data[train,]
+Boston.test = Boston.Data[-train,]
+source('BDS1.R')
+decisionStump = createDecisionStump(Boston.train)
+#print(decisionStump)
+TestMse = calculateTestMSE(decisionStump, Boston.test)
+print("DS: TEST MSE RESULT");print(TestMse)
+```
+
+
+Task 2
+
+
+```{r}
+library(MASS)
+source('BDS1.R')
+source('BDS2.R')
+data("Boston")
+learning_rate <- 0.01
+Boosting_Tree = 1000
+set.seed(2605)
+train <- sample(1:nrow(Boston), nrow(Boston)/2)
+train_Data <- Boston[train,]
+test_Data <- Boston[-train,]
+boosting_models = BoostingDecisionStump(train_Data, Boosting_Tree,learning_rate)
+TestMseBDS = calculateBDSTestMSE(boosting_models, test_Data, learning_rate)
+print("BDS: TEST MSE RESULT")
+print(TestMseBDS$TEST_MSE[which(TestMseBDS$B == Boosting_Tree)])
+```
+
+
+
+Task 3
+
+```{r}
+source('BDS3.R')
+plot_graph(TestMseBDS$B, TestMseBDS$TEST_MSE)
+
+```
+
